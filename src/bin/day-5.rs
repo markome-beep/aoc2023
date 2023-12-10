@@ -57,7 +57,7 @@ fn match_range(map: &(u64, u64, u64), range: (u64, u64)) -> (Vec<(u64, u64)>, Op
     match (map_source, map_end, seed_start, seed_end) {
         (map_source, map_end, seed_start, seed_end)
             if map_source <= seed_start && seed_end <= map_end => {
-  //              println!("Case 1");
+                println!("Case 1");
                 (
                     vec![],
                     Some((seed_start+dest-map_source, seed_range))
@@ -65,9 +65,9 @@ fn match_range(map: &(u64, u64, u64), range: (u64, u64)) -> (Vec<(u64, u64)>, Op
             },
 
         (map_source, map_end, seed_start, seed_end)
-            if seed_start <= map_source && map_source < seed_end 
+            if seed_start < map_source && map_source < seed_end 
             && map_end >= seed_end => {
- //               println!("Case 2");
+                println!("Case 2");
                 (
                     vec![(seed_start, map_source-seed_start)],
                     Some((dest, seed_end-map_source))
@@ -75,21 +75,21 @@ fn match_range(map: &(u64, u64, u64), range: (u64, u64)) -> (Vec<(u64, u64)>, Op
             },
 
         (map_source, map_end, seed_start, seed_end)
-            if seed_start < map_source && map_end < seed_end => {
- //               println!("Case 3");
-                (
-                    vec![(seed_start, map_source-seed_start), (seed_end, seed_end-map_end)],
-                    Some((dest, map_range))
-                )
-            },
-
-        (map_source, map_end, seed_start, seed_end)
             if seed_start < map_end && map_end < seed_end 
             && map_source < seed_start => {
- //               println!("Case 4");
+                println!("Case 4");
                 (
                     vec![(map_end, seed_end-map_end)],
                     Some((seed_start+dest-map_source, map_end-seed_start))
+                )
+            },
+            
+        (map_source, map_end, seed_start, seed_end)
+            if seed_start < map_source && map_end < seed_end => {
+                println!("Case 3");
+                (
+                    vec![(seed_start, map_source-seed_start), (seed_end, seed_end-map_end)],
+                    Some((dest, map_range))
                 )
             },
 
@@ -121,7 +121,7 @@ fn process_seed(all_maps: &Vec<Vec<(u64, u64, u64)>>, seed: &(u64, u64), layer: 
  //   println!("");
 
     if layer >= all_maps.len()-1 {
-        result.iter().inspect(|f| { dbg!(&f); }).fold(u64::MAX, |acc, &(s, _)| s.min(acc))
+        result.iter().inspect(|f| { println!("{f:?}"); }).fold(u64::MAX, |acc, &(s, _)| s.min(acc))
     }
     else {
         let mut min = u64::MAX;
@@ -155,7 +155,7 @@ fn day5_2_fast(input: &str) -> u64 {
     }
     
 //    process_seed(&all_maps, &seeds[0], 0)
-    seeds.iter().map(|seed| process_seed(&all_maps, seed, 0)).min().unwrap() 
+    seeds.iter().inspect(|f| { println!("\n\n\n\nSeed {f:?}");}).map(|seed| process_seed(&all_maps, seed, 0)).min().unwrap() 
 }
 
 #[cfg(test)]
@@ -204,6 +204,44 @@ humidity-to-location map:
     #[test]
     fn part2() {
         let result = day5_2_fast("seeds: 79 14 55 13
+
+seed-to-soil map:
+50 98 2
+52 50 48
+
+soil-to-fertilizer map:
+0 15 37
+37 52 2
+39 0 15
+
+fertilizer-to-water map:
+49 53 8
+0 11 42
+42 0 7
+57 7 4
+
+water-to-light map:
+88 18 7
+18 25 70
+
+light-to-temperature map:
+45 77 23
+81 45 19
+68 64 13
+
+temperature-to-humidity map:
+0 69 1
+1 0 69
+
+humidity-to-location map:
+60 56 37
+56 93 4");
+        assert_eq!(result, 46);
+    }
+    
+#[test]
+    fn part2_2() {
+        let result = day5_2_fast("seeds: 1857095529 814584370
 
 seed-to-soil map:
 50 98 2
