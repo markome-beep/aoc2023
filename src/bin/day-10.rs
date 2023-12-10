@@ -70,11 +70,11 @@ fn make_move(map: &Vec<Vec<char>>, position: (usize, usize), entry: char) -> Opt
 
 fn day10_1(input: &str) -> u32 {
     let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
-    let (mut pos, entry) = find_s(&map);
+    let (mut pos, mut entry) = find_s(&map);
     let mut sum = 1;
 
     loop {
-        let Some(entry) = make_move(&map, pos, entry) else { return 0 };
+        entry = make_move(&map, pos, entry).unwrap();
         sum += 1;
         match entry {
             'E' => { pos = (pos.0, pos.1+1) },
@@ -92,4 +92,32 @@ fn day10_1(input: &str) -> u32 {
 
 fn day10_2(input: &str) -> u32 {
     todo!()
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn part1() { 
+        let result = day10_1(
+".....
+.S-7.
+.|.|.
+.L-J.
+....."
+        );
+
+        assert_eq!(result, 4);
+    }
+
+    #[test]
+    fn part2() { 
+        let result = day10_2("0 3 6 9 12 15
+1 3 6 10 15 21
+10 13 16 21 30 45");
+
+        assert_eq!(result, 2);
+    }
 }
