@@ -94,27 +94,6 @@ fn get_hand_type(cards: &Vec<u32>) -> u32 {
     }
 }
 
-// fn read_hand(line: &str, map: &HashMap<char, u32>) -> Hand {
-//     let Some((cards, bet)) = line.split_once(" ") else { panic!("Invalid Line") };
-//     
-//     let bet = bet.parse().unwrap();
-//     let cards = cards.chars()
-//         .map(|c| {
-//             if let Some(r) = c.to_digit(10) {
-//                 r
-//             }
-//             else {
-//                 if let Some(&r) = map.get(&c) {
-//                     r 
-//                 }
-//                 else { 0 }
-//             }
-//         }).collect();
-//     let hand_type = get_hand_type(&cards);
-// 
-//     Hand { cards, hand_type, bet }
-// }
-
 fn day7_1(intput: &str) -> u32 {
     let mut heap: BinaryHeap<Hand> = BinaryHeap::new();
     let map = HashMap::from([
